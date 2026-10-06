@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir fastmcp httpx pydantic uvicorn
 COPY servers/ ./servers/
 
 EXPOSE 8001
-EXPOSE 8002
 
-CMD ["python", "-m", "servers.remote_currency"]
+# Run the Unified LifeFlowCloudIntelligence Server
+CMD ["python", "-m", "servers.remote_hub"]

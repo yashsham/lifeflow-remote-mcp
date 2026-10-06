@@ -1,52 +1,61 @@
-# 🌐 LifeFlow Remote FastMCP Servers
+# 🌐 LifeFlow Remote FastMCP Servers (Cloud Intelligence Hub)
 
-Standalone, cloud-deployable **Model Context Protocol (MCP)** microservices built with **FastMCP** using SSE/HTTP transport.
+[![FastMCP](https://img.shields.io/badge/FastMCP-v4.0.11-blue.svg)](https://github.com/jlowin/fastmcp)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-brightgreen.svg)](https://python.org)
+[![Protocol](https://img.shields.io/badge/Protocol-MCP%20SSE-orange.svg)](https://modelcontextprotocol.io)
 
-Any MCP client in the world (Claude Desktop, Cursor, Custom Agents) can plug into these servers for live external intelligence!
+Standalone, cloud-deployable **Model Context Protocol (MCP)** server built with **FastMCP** over SSE transport. 
 
----
-
-## ⚡ Servers Included
-
-### 1. `RemoteCurrencyServer` (Port 8001 / SSE)
-- File: `servers/remote_currency.py`
-- **Tools**:
-  - `convert_currency(amount, from_curr, to_curr)`: Real-time global forex conversion.
-  - `get_crypto_price(coin)`: Live market rates for Bitcoin, Ethereum, and Solana.
-
-### 2. `RemoteCityServer` (Port 8002 / SSE)
-- File: `servers/remote_city.py`
-- **Tools**:
-  - `get_city_weather(city)`: Real-time weather and outdoor status for any global city.
-  - `get_city_living_tips(city)`: Living cost indicators, meal budgets, and transit advice.
+Any MCP client in the world (Claude Desktop, Cursor, Custom Agent, FastMCP Cloud) can connect with **a single URL** to access global forex, cryptocurrency rates, live weather, and city living cost intelligence!
 
 ---
 
-## 🚀 How to Run Standalone
+## ⚡ Unified Server: `LifeFlowCloudIntelligence`
+- **File:** `servers/remote_hub.py`
+- **Transport:** SSE / HTTP (`/sse`)
+- **Port:** `8001`
+
+### 🛠️ Exposed Tools:
+1. `convert_currency(amount, from_curr, to_curr)` — Real-time fiat exchange rates (USD, INR, EUR, GBP, AED, CAD, JPY).
+2. `get_crypto_price(coin)` — Real-time valuations for Bitcoin, Ethereum, and Solana in USD & INR.
+3. `get_city_weather(city)` — Live global temperature, humidity, and outdoor conditions.
+4. `get_city_living_tips(city)` — Living cost guides, transit recommendations, and dining budgets for global metropolitans.
+
+---
+
+## 🚀 Run Standalone Locally
 
 ```bash
-# Run Currency Server
-python -m servers.remote_currency
+# Install dependencies
+pip install fastmcp httpx pydantic uvicorn
 
-# Run City Server
-python -m servers.remote_city
+# Start the unified remote hub
+python -m servers.remote_hub
 ```
+*Server will be live on: `http://localhost:8001/sse`*
 
 ---
 
-## 🔌 Connecting from Any MCP Client
+## 🔌 Connect from Any MCP Client (Claude Desktop / Cursor)
 
-Add to your `mcp_servers` configuration:
+Add to your `claude_desktop_config.json` or MCP settings:
 
 ```json
 {
   "mcpServers": {
-    "currency_server": {
+    "lifeflow_cloud": {
       "url": "http://127.0.0.1:8001/sse"
-    },
-    "city_server": {
-      "url": "http://127.0.0.1:8002/sse"
     }
   }
 }
+```
+*(Or replace with your public FastMCP Cloud / Render URL once deployed!)*
+
+---
+
+## 🐳 Docker Deployment
+
+```bash
+docker build -t lifeflow-remote-mcp .
+docker run -p 8001:8001 lifeflow-remote-mcp
 ```
